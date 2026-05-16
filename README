@@ -1,61 +1,39 @@
-📚 Document Butler – Production-Ready RAG SystemA production‑ready Retrieval‑Augmented Generation (RAG) system that enables users to upload multi-format documents, ask contextual questions, and receive streaming answers with precise source citations. Built using a modern, reactive stack: FastAPI (Backend), Qdrant (Vector DB), LangChain, and React (Frontend).✨ Features📄 Multi‑Format Upload – Out-of-the-box support for PDF, DOCX, Markdown, CSV, and TXT.🔍 Semantic Search – High-accuracy vector retrieval using enterprise embeddings and Qdrant Cloud.💬 Streaming Answers – Token‑by‑token real-time LLM stream utilizing Server-Sent Events (SSE).📌 Deep Source References – Every answer details the exact source chunks, file name, page number, and vector relevance score.🗂️ Document Management – Built-in file layout to easily list, track, and completely delete indexed documents (automatically wipes associated vector chunks).⚡ Optimized Architecture – Lifespan state management handles memory footprint by loading embedding models and LLM wrappers exactly once at startup.🎨 Elite Dark Theme UI – Desktop-optimized grid UI with active websocket/connection indicator, drop-zones, and side-by-side pane viewer.🧪 Self-Documenting API – Auto-generated interactive endpoint schemas using Swagger UI.🏗️ Project Structuretextfastapi_rag_project/
-├── app/
-│   ├── __init__.py
-│   ├── api.py               # Endpoint route handlers
-│   ├── config.py            # Pydantic Settings management (.env mapping)
-│   ├── file_loader.py       # Custom document parsing logic (PDF, DOCX, etc.)
-│   ├── models.py            # Pydantic schema validation layers
-│   ├── rag_chain.py         # Embedding orchestration, indexing, and querying
-│   ├── routes.py            # FastAPI router integration
-│   └── state.py             # Singleton state storage for lifespan pipeline
-├── uploads_tmp/             # System temporary data store (runtime created)
-├── uploads_original/        # Permanent local storage for raw files
-├── markdown_files/          # Intermediate clean markdown storage layer
-├── .env                     # App configuration secrets (Ignored by Git)
-├── main.py                  # Standard FastAPI production entry point
-└── requirements.txt         # Core pip-packaged backend dependencies
+# 🧠 Document Butler · RAG API
 
-document-butler/             # Complete React Frontend Sandbox
-├── src/
-│   ├── App.jsx              # Base entry template shell
-│   ├── DocumentButler.jsx   # Core stateful layout dashboard
-│   └── index.css            # Base canvas utilities & global reset mechanics
-└── package.json             # NPM package blueprint configurations
-Use code with caution.🚀 Quick Start GuideSystem PrerequisitesPython 3.10+ installed locally.Node.js 18+ accompanied by npm.A free-tier instance configuration at Qdrant Cloud.An active OpenAI API Key (or Hugging Face inference endpoints access tokens).1. Backend Engine Configurationsbash# Clone repository infrastructure
-git clone <your-repo-url>
+> Upload documents, ask questions, get AI answers with source citations — streaming in real time.
+
+![FastAPI](https://img.shields.io/badge/FastAPI-0.111-009688?logo=fastapi)
+![React](https://img.shields.io/badge/React-18-61DAFB?logo=react)
+![Qdrant](https://img.shields.io/badge/Qdrant-Cloud-8A2BE2)
+![License](https://img.shields.io/badge/License-MIT-blue)
+
+---
+
+## ✨ Features
+
+- 📄 **Multi‑format** – PDF, DOCX, MD, CSV, TXT  
+- ⚡ **Streaming answers** – token‑by‑token via SSE  
+- 🔗 **Source references** – every answer links to the original chunk  
+- 🗑️ **Document management** – list / delete uploaded files  
+- 🎨 **Dark UI** – built with React + Vite  
+
+---
+
+## 🚀 Quick Start
+
+### Backend
+```bash
+git clone <repo>
 cd fastapi_rag_project
-
-# Establish clean environment isolation
-python -m venv venv
-source venv/bin/activate      # Windows specific execution: venv\Scripts\activate
-
-# Install essential project modules
+python -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
-Use code with caution.Setup .env Configuration FileCreate a new file explicitly named .env inside your backend root (fastapi_rag_project/):iniOPENAI_API_KEY=sk-proj-...your-actual-key...
-QDRANT_URL=https://xxxx-your-cluster.cloud.qdrant.io:6333
-QDRANT_API_KEY=your-secure-qdrant-dashboard-api-key
-QDRANT_COLLECTION=rag_docs
+# edit .env with your Qdrant & OpenAI keys
+python main.py
 
-EMBEDDING_PROVIDER=huggingface   # Alternative configuration option: "openai"
-LLM_MODEL=gpt-4o-mini
-
-MAX_UPLOAD_SIZE_MB=50
-UPLOAD_DIR=uploads_tmp
-Use code with caution.Fire Up the Backendbashpython main.py
-Use code with caution.Local Development Host: http://localhost:8000Automated Swagger Interactive Docs Dashboard: http://localhost:8000/docs2. Frontend Interface ConfigurationsOpen up a secondary standalone terminal shell window:bash# Shift location matrix into your workspace directory
+Frontend (separate terminal)
+bash
+npm create vite@latest document-butler -- --template react
 cd document-butler
-
-# Setup dependencies architecture
 npm install
-Use code with caution.File Configurations SetupEnsure your local src/App.jsx setup exports the structural UI core clean:jsximport DocumentButler from './DocumentButler'
-
-export default function App() { 
-  return <DocumentButler /> 
-}
-Use code with caution.Ensure your layout system remains fluid without breaking scroll layers by adding this to src/index.css:css@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { overflow: hidden; background-color: #121212; }
-Use code with caution.Run Frontendbashnpm run dev
+# copy src/DocumentButler.jsx from this repo
+npm run dev
