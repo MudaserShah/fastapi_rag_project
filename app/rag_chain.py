@@ -271,6 +271,51 @@ def query_with_references(
 
 
 # ==================================================================================
+# QUERY CONTEXT HELPER  (used by streaming endpoint)
+# ==================================================================================
+
+def query_with_references_context(
+    question: str,
+    top_k: int,
+    client: QdrantClient,
+    embeddings,
+    collection_name: str,
+):
+    """
+    Retrieve top_k chunks for a question and return (context_str, references_list).
+    Used by the streaming handler so it can stream the LLM call separately.
+    """
+    query_vector = embeddings.embed_query(question)
+
+    search_result = client.query_points(
+        collection_name=collection_name,
+        query=query_vector,
+        limit=top_k,
+        with_payload=True,
+    ).points
+
+    references: List[Reference] = []
+    context_texts: List[str]    = []
+
+    for r in search_result:
+        payload = r.payload
+        text    = payload.get("text", "")
+        context_texts.append(text)
+        references.append(
+            Reference(
+                file_name      = payload.get("file_name", ""),
+                file_type      = payload.get("file_type", ""),
+                page_number    = payload.get("page_number", 1),
+                chunk_index    = payload.get("chunk_index", 0),
+                chunk_text     = text,
+                relevance_score= r.score,
+            )
+        )
+
+    return "".join(context_texts), references
+
+
+# ==================================================================================
 # DELETE DOCUMENT
 # ==================================================================================
 
