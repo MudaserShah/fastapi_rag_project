@@ -1,14 +1,4 @@
 # 🧠 Document Butler · RAG API
-
-> Upload documents, ask questions, get AI answers with source citations — streaming in real time.
-
-![FastAPI](https://img.shields.io/badge/FastAPI-0.111-009688?logo=fastapi)
-![React](https://img.shields.io/badge/React-18-61DAFB?logo=react)
-![Qdrant](https://img.shields.io/badge/Qdrant-Cloud-8A2BE2)
-![License](https://img.shields.io/badge/License-MIT-blue)
-
----
-
 ## ✨ Features
 
 - 📄 **Multi‑format** – PDF, DOCX, MD, CSV, TXT  
